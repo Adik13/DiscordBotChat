@@ -2,28 +2,38 @@ from dotenv import load_dotenv
 import os
 import discord
 from app.chatgpt_ai.connect_openai import chatgpt_response
-
+chat_history = {}
 load_dotenv()
 discord_token = os.getenv('DISCORD_TOKEN')
+
 
 class MyClient(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.channel = None
+        self.content = None
+        self.author = None
         self.message_history = []
 
     async def on_ready(self):
         print('Logged in as:', self.user)
 
+
     async def on_message(self, message):
-        if message.author == self.user:
+        global chat_history
+        if message.author == client.user:
             return
+        if message.content.startswith("$hello"):
+            await message.channel.send("Hello!")
+        else:
+            command = parse_command(message)
+            prompt = message.content
+            if message.channel.id not in chat_history:
+                chat_history[message.channel.id] = []
+            response = chatgpt_response(prompt, chat_history[message.channel.id], **command)
+            chat_history[message.channel.id].append(response)
+            await message.channel.send(response)
 
-        self.message_history.append(message.content)
-        if len(self.message_history) > 5:
-            self.message_history.pop(0)
-
-        response = chatgpt_response(message.content, self.message_history)
-        await message.channel.send(f"You said: {message.content}\n{response}")
 
 intents = discord.Intents.default()
 intents.messages = True

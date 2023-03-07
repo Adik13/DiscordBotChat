@@ -1,4 +1,4 @@
-from app.discord_bot.connect_discord import client, discord_token
+from app.discord_bot import connect_discord
 
 if __name__ == '__main__':
-    client.run(discord_token)
+    connect_discord.run()

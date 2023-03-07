@@ -40,5 +40,8 @@ class MyClient(discord.Client):
 intents = discord.Intents.default()
 intents.messages = True
 client = MyClient(intents=intents)
-
 client.run(discord_token)
+
+
+def run():
+    return None

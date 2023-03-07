@@ -3,7 +3,7 @@ import openai
 import os
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_KEY')
-openai.api_key='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'
+
 
 def chatgpt_response(prompt, message_history=None):
     if message_history:
